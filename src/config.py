@@ -6,6 +6,33 @@ from pathlib import Path
 # [수정 포인트] 프로젝트 루트 경로입니다. 일반적으로 수정하지 않아도 됩니다.
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
+ENV_PATH = PROJECT_ROOT / ".env"
+
+
+def load_env_file(path: Path = ENV_PATH) -> None:
+    """Load simple KEY=VALUE pairs from .env without overriding real env vars."""
+    if not path.exists():
+        return
+
+    import os
+
+    with path.open("r", encoding="utf-8") as file:
+        for raw_line in file:
+            line = raw_line.strip()
+
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+
+            key, value = line.split("=", 1)
+            key = key.strip()
+            value = value.strip().strip("\"'")
+
+            if key and key not in os.environ:
+                os.environ[key] = value
+
+
+load_env_file()
+
 # [수정 포인트] 수집할 lecture id 목록 파일 경로입니다.
 LECTURE_IDS_PATH = PROJECT_ROOT / "data" / "lecture_ids.json"
 
