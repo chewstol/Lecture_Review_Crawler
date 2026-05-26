@@ -33,11 +33,14 @@ def load_env_file(path: Path = ENV_PATH) -> None:
 
 load_env_file()
 
-# [수정 포인트] 수집할 lecture id 목록 파일 경로입니다.
-LECTURE_IDS_PATH = PROJECT_ROOT / "data" / "lecture_ids.json"
+# [수정 포인트] 수집할 강의 코드가 포함된 CSV 파일 경로입니다.
+SUBJECTS_PATH = PROJECT_ROOT / "data" / "subjects.csv"
 
 # [수정 포인트] API 원본 응답 JSON을 저장할 디렉터리입니다.
 RAW_DATA_DIR = PROJECT_ROOT / "data" / "raw"
+
+# [수정 포인트] 배치 단위 수집 진행 상황을 저장할 체크포인트 파일입니다.
+CHECKPOINT_PATH = PROJECT_ROOT / "data" / "collection_checkpoint.json"
 
 # [수정 포인트] 강의 상세 데이터를 요청하는 내부 API URL입니다.
 LECTURE_API_URL = "https://api.everytime.kr/find/lecture"
@@ -63,8 +66,16 @@ DEFAULT_OFFSET = 40
 # [수정 포인트] API 응답 정렬 기준입니다.
 DEFAULT_SORT = "id"
 
-# [수정 포인트] 반복 요청 차단을 피하기 위한 요청 간 최소 대기 시간입니다.
-REQUEST_DELAY_SECONDS = 1.5
+# [수정 포인트] 각 API 요청 직전 적용할 랜덤 대기 시간 범위입니다.
+REQUEST_DELAY_MIN_SECONDS = 0.5
+REQUEST_DELAY_MAX_SECONDS = 1.5
+
+# [수정 포인트] 긴 대기를 적용할 API 요청 단위 배치 크기입니다.
+REQUEST_BATCH_SIZE = 20
+
+# [수정 포인트] 한 배치가 끝난 뒤 다음 요청 전에 적용할 랜덤 긴 대기 시간 범위입니다.
+BATCH_DELAY_MIN_SECONDS = 30.0
+BATCH_DELAY_MAX_SECONDS = 40.0
 
 # [수정 포인트] API가 정상 처리되었을 때 반환하는 status 값입니다.
 SUCCESS_STATUS = "success"
